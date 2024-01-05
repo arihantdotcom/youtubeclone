@@ -14,15 +14,24 @@ const registerUser = asynchandler(async (req, res) => {
   // cheak user creation success or not
   //  send response to frontend
 
-  const { fullname, email } = req.body;
-  console.log("fullname", fullname, "email", email);
+  const { fullname, email, password, username } = req.body;
+  console.log(
+    "fullname",
+    fullname,
+    "email",
+    email,
+    "password",
+    password,
+    "username",
+    username
+  );
 
   if (
-    [fullname, email, password, username].some((Field) => field?.trim() === "")
+    [fullname, email, password, username].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "All fields are required");
   }
-  const exitedUser = User.findOne({
+  const exitedUser = await User.findOne({
     $or: [{ email }, { username }],
   });
 
@@ -31,7 +40,7 @@ const registerUser = asynchandler(async (req, res) => {
   }
 
   const avatarloclapath = req.files?.avatar[0]?.path;
-  const coverimgloclapath = req.files?.coverimg[0]?.path;
+  const coverimgloclapath = req.files?.coverImage[0]?.path;
 
   if (!avatarloclapath) {
     throw new ApiError(400, "avatar is required");
