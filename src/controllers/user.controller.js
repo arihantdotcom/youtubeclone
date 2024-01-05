@@ -2,6 +2,8 @@ import { asynchandler } from "../utils/asynchandler.js";
 import { ApiError } from "../utils/apierror.js";
 import { User } from "../models/user.models.js";
 import { uploadoncloudinary } from "../utils/cloudnary.js";
+import { Apires } from "../utils/Apires.js";
+
 const registerUser = asynchandler(async (req, res) => {
   // get user details from frontend ya postman
   // validation
@@ -44,31 +46,26 @@ const registerUser = asynchandler(async (req, res) => {
     throw new ApiError(400, "Avatar is required");
   }
 
-
-  const user = await User.create ({
+  const user = await User.create({
     fullname,
     avatar: avatar.url,
-    coverImage: cover.url,  //AGAR KOI ERROR AAYE TO YHA CHECK KARO KI MODULE NAME TO MISMATCH NAHI HAI
+    coverImage: cover.url, //AGAR KOI ERROR AAYE TO YHA CHEACK KARO KI MODULE NAME TO MISMATCH NAHI HAI
     email,
     password,
-    username:username.toLowerCase(),
-  
-  
-  })
-   
+    username: username.toLowerCase(),
+  });
 
-  
+  const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
 
- const createdUser = await User.findById(user._id).select(
-  "-password -refreshToken"
- )
-  
-  if (!createdUser){
-
-    throw new ApiError (500, "user creation failed")
+  if (!createdUser) {
+    throw new ApiError(500, "user creation failed");
   }
 
-
+  return res
+    .status(201)
+    .json(new Apires(200, createdUser, "User registed successfully"));
 });
 
 export { registerUser };
