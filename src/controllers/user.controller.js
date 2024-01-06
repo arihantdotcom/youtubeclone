@@ -39,6 +39,8 @@ const registerUser = asynchandler(async (req, res) => {
     throw new ApiError(409, "user already registered");
   }
 
+  console.log(req.files)
+
   const avatarloclapath = req.files?.avatar[0]?.path;
   const coverimgloclapath = req.files?.coverImage[0]?.path;
 
@@ -58,7 +60,7 @@ const registerUser = asynchandler(async (req, res) => {
   const user = await User.create({
     fullname,
     avatar: avatar.url,
-    coverImage: cover.url, //AGAR KOI ERROR AAYE TO YHA CHEACK KARO KI MODULE NAME TO MISMATCH NAHI HAI
+    coverImage: cover.url, 
     email,
     password,
     username: username.toLowerCase(),

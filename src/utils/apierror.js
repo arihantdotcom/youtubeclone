@@ -9,7 +9,7 @@ class ApiError extends Error {
     this.statusCode = statusCode;
     this.data = null;
     this.message = false;
-    this.error =error;
+    this.error = error;
 
     if (stack) {
       this.stack = stack;
